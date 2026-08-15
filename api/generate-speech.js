@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // CORS başlıkları
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -8,7 +7,6 @@ export default async function handler(req, res) {
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 
-  // Preflight istekleri için yanıt
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
@@ -30,11 +28,11 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'ELEVENLABS_API_KEY ortam değişkeni tanımlanmamış.' });
   }
 
-  // Ücretsiz hesaplarda çalışan standart "Adam" ses ID'si
-  const voiceId = '21m00Tcm4TlvDq8ikWAM'; 
+  // Ücretsiz hesaplarda %100 çalışan varsayılan Türkçe destekli "Rachel" sesi
+  const defaultVoiceId = '21m00Tcm4TlvDq8ikWAM';
 
   try {
-    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${defaultVoiceId}`, {
       method: 'POST',
       headers: {
         'Accept': 'audio/mpeg',
