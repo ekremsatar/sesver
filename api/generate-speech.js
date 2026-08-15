@@ -28,8 +28,8 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'ELEVENLABS_API_KEY ortam değişkeni tanımlanmamış.' });
   }
 
-  // Ücretsiz hesaplarda %100 çalışan varsayılan Türkçe destekli "Rachel" sesi
-  const defaultVoiceId = '21m00Tcm4TlvDq8ikWAM';
+  // Ücretsiz API erişiminde kesin çalışan varsayılan ses ID'si (George)
+  const defaultVoiceId = 'JBFqnCBsd6RMkjVDRZzb';
 
   try {
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${defaultVoiceId}`, {
