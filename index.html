@@ -1,158 +1,187 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- SEO Meta Etiketleri -->
-  <title>SesVer - Ücretsiz Metinden Sese Dönüştürücü (TTS)</title>
-  <meta name="description" content="Türkçe metinlerinizi saniyeler içinde yapay zeka destekli doğal seslendirmeye çevirin. Ücretsiz ve hızlı metinden sese dönüştürme aracı.">
-  <meta name="keywords" content="metinden sese, tts, seslendirme, yapay zeka ses, türkçe seslendirme, elevenlabs">
-  <meta name="robots" content="index, follow">
-  
-  <!-- Google Search Console Doğrulama (Kendi doğrulama kodunu content alanına yapıştır) -->
-  <meta name="google-site-verification" content="SEARCH_CONSOLE_DOGRULAMA_KODUNUZ" />
-
-  <!-- Google Analytics (GA4) (G-XXXXXXXXXX kısmını kendi Kimliğinle değiştir) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
-  </script>
-
-  <!-- Google AdSense (ca-pub-XXXXXXXXXXXXXXXX kısmını kendi Yayıncı Kimliğinle değiştir) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #0b0f17; color: #f3f4f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px 16px; }
-    .container { max-width: 650px; width: 100%; text-align: center; }
-    .badge { color: #d97706; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
-    h1 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
-    p.subtitle { color: #9ca3af; font-size: 14px; line-height: 1.5; margin-bottom: 24px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SesVer - Ücretsiz Türkçe Metinden Sese Dönüştürücü (TTS)</title>
+    <meta name="description" content="Yazdığınız Türkçe metinleri saniyeler içinde yapay zeka ile doğal ve kaliteli seslendirmeye dönüştürün. Ücretsiz metin okuma aracı.">
+    <meta name="keywords" content="metinden sese, text to speech, tts türkçe, metin okuma, yapay zeka seslendirme, sesver">
     
-    /* AdSense Reklam Alanları */
-    .ad-container { margin: 20px 0; width: 100%; text-align: center; overflow: hidden; min-height: 90px; }
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sesver-one.vercel.app/">
+    <meta property="og:title" content="SesVer - Metinden Sese Dönüştürücü">
+    <meta property="og:description" content="Metinlerinizi yapay zeka ile doğal seslendirmeye dönüştürün.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    .card { background-color: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; text-align: left; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
-    .card-label { font-size: 10px; color: #6b7280; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
-    textarea { width: 100%; height: 160px; background-color: #1a2234; border: 1px solid #2d3748; border-radius: 8px; color: #f3f4f6; padding: 14px; font-size: 14px; resize: vertical; outline: none; transition: border-color 0.2s; }
-    textarea:focus { border-color: #3b82f6; }
-    .info-row { display: flex; justify-content: space-between; font-size: 11px; color: #6b7280; margin: 8px 0 16px 0; }
-    .btn { width: 100%; padding: 14px; background-color: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: background-color 0.2s, transform 0.1s; }
-    .btn:hover { background-color: #1d4ed8; }
-    .btn:active { transform: scale(0.99); }
-    .btn:disabled { background-color: #374151; cursor: not-allowed; opacity: 0.7; }
-    audio { width: 100%; margin-top: 16px; display: none; }
-    .status { margin-top: 12px; font-size: 13px; text-align: center; font-weight: 500; }
-    footer { margin-top: auto; padding: 20px 0 10px; color: #4b5563; font-size: 12px; text-align: center; }
-  </style>
+    <!-- Google Analytics (GA4) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
+    <!-- <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script> -->
+
+    <!-- Google AdSense -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between font-sans antialiased">
 
-<div class="container">
-  <div class="badge">Metinden Sese</div>
-  <h1>Yazdığınız Her Şeyi Sese Dönüştürün</h1>
-  <p class="subtitle">Türkçe metinlerinizi saniyeler içinde doğal seslendirmeye çevirin. Ücretsiz başlayın, isterseniz premium seslerle kaliteyi bir üst seviyeye taşıyın.</p>
+    <!-- Üst Header -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <span class="bg-blue-600 text-white p-2 rounded-lg font-bold text-xl">SV</span>
+                <span class="text-xl font-bold tracking-tight text-white">SesVer</span>
+            </div>
+            <span class="text-xs bg-slate-800 text-slate-400 px-2.5 py-1 rounded-full font-medium">v1.0</span>
+        </div>
+    </header>
 
-  <!-- Üst AdSense Banner -->
-  <div class="ad-container">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="1234567890"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
+    <!-- Ana İçerik -->
+    <main class="max-w-3xl mx-auto px-4 py-8 w-full flex-grow">
+        
+        <!-- Başlık Alanı -->
+        <div class="text-center mb-8">
+            <span class="text-xs font-semibold uppercase tracking-wider text-amber-500">Metinden Sese</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white mt-1 mb-3">Yazdığınız Her Şeyi Sese Dönüştürün</h1>
+            <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
+                Türkçe metinlerinizi saniyeler içinde doğal seslendirmeye çevirin. Ücretsiz başlayın, metninizi sese aktarın.
+            </p>
+        </div>
 
-  <div class="card">
-    <span class="card-label">SENARYO</span>
-    <textarea id="textInput" placeholder="Seslendirilecek metni buraya yazın..."></textarea>
-    
-    <div class="info-row">
-      <span id="charCount">0 karakter</span>
-      <span id="wordCount">0 kelime</span>
-    </div>
+        <!-- Üst Reklam Alanı (AdSense Placeholder) -->
+        <div class="my-6 p-4 border border-dashed border-slate-800 bg-slate-900/30 rounded-xl text-center text-slate-600 text-xs">
+            <!-- AdSense Kod Alanı - Top Banner -->
+            <span>Reklam Alanı</span>
+        </div>
 
-    <button id="generateBtn" class="btn">Sesi Oluştur</button>
-    <div id="status" class="status"></div>
-    <audio id="audioPlayer" controls></audio>
-  </div>
+        <!-- TTS Form Alanı -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl">
+            <form id="ttsForm" class="space-y-4">
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="textInput" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Senaryo / Metin</label>
+                        <span id="charCount" class="text-xs text-slate-500">0 karakter</span>
+                    </div>
+                    <textarea 
+                        id="textInput" 
+                        rows="5" 
+                        maxlength="1000"
+                        placeholder="Seslendirmek istediğiniz metni buraya yazın..."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition text-sm resize-none"
+                        required></textarea>
+                </div>
 
-  <!-- Alt AdSense Banner -->
-  <div class="ad-container">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="0987654321"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-</div>
+                <button 
+                    type="submit" 
+                    id="submitBtn"
+                    class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center space-x-2 text-sm shadow-lg shadow-blue-600/20 active:scale-[0.99]">
+                    <span id="btnText">Sesi Oluştur</span>
+                    <svg id="spinner" class="animate-spin h-4 w-4 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </form>
 
-<footer>
-  <p>&copy; 2026 SesVer. Tüm Hakları Saklıdır.</p>
-</footer>
+            <!-- Hata Mesajı -->
+            <div id="errorMessage" class="hidden mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs text-center"></div>
 
-<script>
-  const textInput = document.getElementById('textInput');
-  const charCount = document.getElementById('charCount');
-  const wordCount = document.getElementById('wordCount');
-  const generateBtn = document.getElementById('generateBtn');
-  const audioPlayer = document.getElementById('audioPlayer');
-  const status = document.getElementById('status');
+            <!-- Ses Oynatıcı Alanı -->
+            <div id="audioContainer" class="hidden mt-6 pt-6 border-t border-slate-800 space-y-3">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Oluşturulan Ses</span>
+                <audio id="audioPlayer" controls class="w-full rounded-lg bg-slate-950"></audio>
+                <a id="downloadBtn" download="sesver-audio.mp3" class="inline-flex items-center justify-center w-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium py-2.5 rounded-xl transition">
+                    Sesi Bilgisayara/Telefona İndir
+                </a>
+            </div>
+        </div>
 
-  textInput.addEventListener('input', () => {
-    const text = textInput.value;
-    charCount.textContent = `${text.length} karakter`;
-    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-    wordCount.textContent = `${words} kelime`;
-  });
+        <!-- Alt Reklam Alanı (AdSense Placeholder) -->
+        <div class="my-6 p-4 border border-dashed border-slate-800 bg-slate-900/30 rounded-xl text-center text-slate-600 text-xs">
+            <!-- AdSense Kod Alanı - Bottom Banner -->
+            <span>Reklam Alanı</span>
+        </div>
 
-  generateBtn.addEventListener('click', async () => {
-    const text = textInput.value.trim();
-    if (!text) {
-      status.style.color = '#ef4444';
-      status.textContent = 'Lütfen seslendirilecek bir metin girin.';
-      return;
-    }
+    </main>
 
-    generateBtn.disabled = true;
-    generateBtn.textContent = 'Ses Oluşturuluyor...';
-    status.style.color = '#9ca3af';
-    status.textContent = '';
-    audioPlayer.style.display = 'none';
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900/30 py-6 text-center text-slate-500 text-xs">
+        <p>&copy; 2026 SesVer. Tüm Hakları Saklıdır.</p>
+    </footer>
 
-    try {
-      const response = await fetch('/api/generate-speech', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text })
-      });
+    <!-- Frontend Script -->
+    <script>
+        const textInput = document.getElementById('textInput');
+        const charCount = document.getElementById('charCount');
+        const ttsForm = document.getElementById('ttsForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const spinner = document.getElementById('spinner');
+        const errorMessage = document.getElementById('errorMessage');
+        const audioContainer = document.getElementById('audioContainer');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const downloadBtn = document.getElementById('downloadBtn');
 
-      if (!response.ok) throw new Error('Ses oluşturulamadı.');
+        // Karakter Sayacı
+        textInput.addEventListener('input', () => {
+            const length = textInput.value.length;
+            charCount.textContent = `${length} karakter`;
+        });
 
-      const blob = await response.blob();
-      const audioUrl = URL.createObjectURL(blob);
-      
-      audioPlayer.src = audioUrl;
-      audioPlayer.style.display = 'block';
-      audioPlayer.play();
-      status.style.color = '#10b981';
-      status.textContent = 'Ses başarıyla hazırlandı!';
-    } catch (err) {
-      status.style.color = '#ef4444';
-      status.textContent = 'Bir hata oluştu. Lütfen tekrar deneyin.';
-    } finally {
-      generateBtn.disabled = false;
-      generateBtn.textContent = 'Sesi Oluştur';
-    }
-  });
-</script>
+        // Form Gönderimi
+        ttsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const text = textInput.value.trim();
+            if (!text) return;
 
+            // UI Durumunu Güncelle (Yükleniyor)
+            submitBtn.disabled = true;
+            btnText.textContent = 'Ses Oluşturuluyor...';
+            spinner.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            audioContainer.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/generate-speech', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `Sunucu Hatası: ${response.status}`);
+                }
+
+                // Ses verisini (Blob) al
+                const blob = await response.blob();
+                const audioUrl = URL.createObjectURL(blob);
+
+                // Oynatıcıyı Hazırla
+                audioPlayer.src = audioUrl;
+                downloadBtn.href = audioUrl;
+                audioContainer.classList.remove('hidden');
+                audioPlayer.play();
+
+            } catch (error) {
+                console.error('İstek Hatası:', error);
+                errorMessage.textContent = error.message || 'Bir hata oluştu. Lütfen tekrar deneyin.';
+                errorMessage.classList.remove('hidden');
+            } finally {
+                // UI Durumunu Sıfırla
+                submitBtn.disabled = false;
+                btnText.textContent = 'Sesi Oluştur';
+                spinner.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
