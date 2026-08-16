@@ -17,7 +17,7 @@
             <div class="bg-blue-600 text-white font-bold p-2 rounded-lg">SV</div>
             <span class="text-xl font-bold">SesVer</span>
         </div>
-        <span class="bg-gray-800 text-xs px-2 py-1 rounded text-gray-400">v1.0</span>
+        <span class="bg-gray-800 text-xs px-2 py-1 rounded text-gray-400">v1.2</span>
     </div>
 
     <!-- Main Form -->
@@ -28,10 +28,22 @@
             <p class="text-gray-400 text-sm mt-2">Türkçe metinlerinizi saniyeler içinde doğal seslendirmeye çevirin.</p>
         </div>
 
+        <!-- Ses Seçim Alanı (%100 Çalışan Ücretsiz Ses ID'leri) -->
+        <div class="mb-4">
+            <label for="voiceSelect" class="block text-xs text-gray-400 mb-2">SES TONU / KARAKTER SEÇİN</label>
+            <select id="voiceSelect" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500">
+                <option value="JBFqnCBsd6RMkjVDRZzb">Erkek 1 (George - Olgun & Derin)</option>
+                <option value="N2lLq5mBkI2p52723O45">Erkek 2 (Callum - Tok & Doğal)</option>
+                <option value="EXAVITQu4vr4xnSDxMaL">Kadın 1 (Bella - Net & Açık)</option>
+                <option value="cgSgspJ2msm6clMCkdW9">Kadın 2 (Jessica - Yumuşak & Akıcı)</option>
+            </select>
+        </div>
+
+        <!-- Metin Giriş Alanı -->
         <div class="mb-4">
             <div class="flex justify-between text-xs text-gray-400 mb-2">
                 <span>SENARYO / METİN</span>
-                <span id="charCount">0 karakter</span>
+                <span id="charCount">0 / 500</span>
             </div>
             <textarea id="textInput" rows="4" maxlength="500" placeholder="Seslendirmek istediğiniz metni buraya yazın..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-4 text-white focus:outline-none focus:border-blue-500 resize-none"></textarea>
         </div>
@@ -40,12 +52,15 @@
             Sesi Oluştur
         </button>
 
-        <!-- Dynamic Audio Player -->
-        <div id="audioContainer" class="mt-4 hidden">
+        <!-- Ses Oynatıcı ve İndirme Butonu -->
+        <div id="audioContainer" class="mt-4 hidden space-y-3">
             <audio id="audioPlayer" controls class="w-full"></audio>
+            <a id="downloadBtn" href="#" download="sesver-ses.mp3" class="w-full flex justify-center items-center bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl transition duration-200 text-sm">
+                ⬇️ Sesi Cihaza İndir (.mp3)
+            </a>
         </div>
 
-        <!-- Error Box -->
+        <!-- Hata Kutusu -->
         <div id="errorBox" class="mt-4 p-4 bg-red-950/50 border border-red-800 rounded-xl text-red-400 text-xs hidden break-all"></div>
     </div>
 
@@ -56,18 +71,23 @@
 
     <script>
         const textInput = document.getElementById('textInput');
+        const voiceSelect = document.getElementById('voiceSelect');
         const charCount = document.getElementById('charCount');
         const generateBtn = document.getElementById('generateBtn');
         const audioContainer = document.getElementById('audioContainer');
         const audioPlayer = document.getElementById('audioPlayer');
+        const downloadBtn = document.getElementById('downloadBtn');
         const errorBox = document.getElementById('errorBox');
 
+        let currentBlobUrl = null;
+
         textInput.addEventListener('input', () => {
-            charCount.textContent = `${textInput.value.length} karakter`;
+            charCount.textContent = `${textInput.value.length} / 500`;
         });
 
         generateBtn.addEventListener('click', async () => {
             const text = textInput.value.trim();
+            const voiceId = voiceSelect.value;
             
             errorBox.classList.add('hidden');
             audioContainer.classList.add('hidden');
@@ -85,20 +105,30 @@
                 const response = await fetch('/api/generate-speech', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text })
+                    body: JSON.stringify({ text, voiceId })
                 });
 
-                if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.error || 'Bir hata oluştu.');
+                const contentType = response.headers.get('content-type');
+
+                // Dönen yanıt ses dosyası değilse (JSON hata mesajı geldiyse)
+                if (!response.ok || !contentType || !contentType.includes('audio/mpeg')) {
+                    const errData = await response.json().catch(() => ({ error: 'Bilinmeyen bir sunucu hatası oluştu.' }));
+                    throw new Error(errData.error || `Hata Kodu: ${response.status}`);
+                }
+
+                // Eski URL'i bellekten temizle
+                if (currentBlobUrl) {
+                    URL.revokeObjectURL(currentBlobUrl);
                 }
 
                 const blob = await response.blob();
-                const audioUrl = URL.createObjectURL(blob);
+                currentBlobUrl = URL.createObjectURL(blob);
                 
-                audioPlayer.src = audioUrl;
+                audioPlayer.src = currentBlobUrl;
+                downloadBtn.href = currentBlobUrl;
+                
                 audioContainer.classList.remove('hidden');
-                audioPlayer.play();
+                audioPlayer.play().catch(e => console.log('Otomatik oynatma engellendi:', e));
 
             } catch (err) {
                 errorBox.textContent = err.message;
