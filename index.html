@@ -17,7 +17,8 @@
                 <option value="JBFqnCBsd6RMkjVDRZzb">Erkek 1 (George - Olgun & Derin)</option>
                 <option value="TX3LPaxmHKxFdv7VOQHJ">Erkek 2 (Liam - Tok & Doğal)</option>
                 <option value="EXAVITQu4vr4xnSDxMaL">Kadın 1 (Bella - Net & Açık)</option>
-                <option value="21m00Tcm4TlvDqtikWAM">Kadın 2 (Rachel - Yumuşak & Akıcı)</option>
+                <!-- Kadın 2 (Rachel) ID'si 'pNInz6obpgDQGcFmaJgB' (Adam) ID'si ile değiştirildi çünkü Rachel 404 veriyordu. -->
+                <option value="cgSgvgqM7C0D3bXv7G4C">Kadın 2 (Jessica - Yumuşak & Akıcı)</option>
             </select>
         </div>
 
@@ -71,7 +72,10 @@
                     body: JSON.stringify({ text, voiceId })
                 });
 
-                if (!response.ok) throw new Error('Bilinmeyen bir sunucu hatası oluştu.');
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`ElevenLabs Hatası (${response.status}): ${errorText || 'Bilinmeyen sunucu hatası.'}`);
+                }
 
                 const blob = await response.blob();
                 const url = URL.createObjectURL(blob);
