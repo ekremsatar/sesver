@@ -14,10 +14,11 @@
         <div class="mb-4">
             <label class="block text-gray-400 text-sm mb-2">SES TONU / KARAKTER SEÇİN</label>
             <select id="voiceSelect" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none">
-                <option value="EXAVITQu4vr4xnSDxMaL">Bella (Kadın)</option>
-                <option value="pNInz6obpgDQGcFmaJgB">Adam (Erkek)</option>
-                <option value="ErXwobaYiN019PkySvjV">Antoni (Erkek)</option>
-                <option value="VR6AewlNigW4w4MNVPH2">Arnold (Erkek)</option>
+                <option value="NNn9dv8zq2kUo7d3JSGG">Derya</option>
+                <option value="uvU9jrgGLWNPeNA4NgNT">İrem</option>
+                <option value="jkClpoYm4F8SPiN3X41b">Deniz</option>
+                <option value="N0wraTTB0pquzsz3DLG8">Nil</option>
+                <option value="DpEiQMnL9WxMsymCsjPY">Emrullah</option>
             </select>
         </div>
 
@@ -72,8 +73,8 @@
                 });
 
                 if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.error || 'Ses oluşturulamadı (Muhtemelen ID geçersiz).');
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Ses oluşturulamadı. Lütfen ID\'lerinizi kontrol edin.');
                 }
 
                 const blob = await response.blob();
