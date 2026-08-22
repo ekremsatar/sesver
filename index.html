@@ -161,6 +161,9 @@
         <svg width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="2" width="3.5" height="12" fill="currentColor"/><rect x="9.5" y="2" width="3.5" height="12" fill="currentColor"/></svg>
       </button>
       <div class="waveform" id="waveform"></div>
+      <a class="btn" id="downloadBtn" title="İndir" style="display:none;text-decoration:none;">
+        <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
       <div class="onair"><span class="lamp" id="lamp"></span><span class="status" id="playStatus">DURDU</span></div>
     </div>
   </div>
@@ -171,7 +174,8 @@
     <p class="panel-title">Hakkında</p>
     <p style="color:var(--cream-dim);font-size:14px;line-height:1.7;margin:0;">
       SesVer, metinlerinizi hızlıca seslendirmenizi sağlayan ücretsiz bir web aracıdır. Standart mod tarayıcınızın
-      kendi ses motorunu kullanır ve tamamen ücretsizdir. Premium mod yapay zekâ destekli, daha doğal sesler sunar.
+      kendi ses motorunu kullanır ve tamamen ücretsizdir. Premium mod, daha doğal ve zengin yapay zekâ sesleri
+      sunacak şekilde geliştirilmektedir.
     </p>
   </div>
 </div>
@@ -393,6 +397,15 @@ stopBtn.addEventListener('click', ()=>{
 });
 
 window.addEventListener('beforeunload', ()=> synth.cancel());
+
+const downloadBtn = document.getElementById('downloadBtn');
+premiumAudio.addEventListener('loadeddata', ()=>{
+  if(premiumAudio.src){
+    downloadBtn.href = premiumAudio.src;
+    downloadBtn.download = 'seslendirme.mp3';
+    downloadBtn.style.display = 'flex';
+  }
+});
 </script>
 </body>
 </html>
