@@ -186,6 +186,13 @@
 <footer>© 2026 SesVer — Metinden sese seslendirme aracı</footer>
 
 <script>
+// PWA Service Worker Kaydı (Uygulama olarak kurulabilmesi için)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW kayıt hatası: ', err));
+  });
+}
+
 const synth = window.speechSynthesis;
 const textArea = document.getElementById('scriptText');
 const voiceSelect = document.getElementById('voiceSelect');
