@@ -1,95 +1,398 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SesVer - Metinden Sese</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SesVer — Metinden Sese Seslendirme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12161B;
+    --panel:#1B2129;
+    --panel-2:#20272F;
+    --cream:#EFEAE0;
+    --cream-dim:#A9A79E;
+    --amber:#E8A33D;
+    --teal:#3E7068;
+    --teal-bright:#5FA79B;
+    --rec:#C1443C;
+    --line:#2C333C;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(ellipse 900px 500px at 50% -10%, #1a2129 0%, var(--ink) 60%);
+    color:var(--cream);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 20px;}
+  nav{border-bottom:1px solid var(--line);padding:18px 0;}
+  .nav-inner{display:flex;justify-content:space-between;align-items:center;}
+  .logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;}
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);}
+  .nav-links{display:flex;gap:26px;font-size:14px;color:var(--cream-dim);}
+  .nav-links a{text-decoration:none;transition:color .15s;}
+  .nav-links a:hover{color:var(--cream);}
+  .hero{padding:64px 0 40px;text-align:center;}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin:0 0 14px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(32px,5.5vw,52px);margin:0 0 16px;letter-spacing:-0.015em;line-height:1.05;}
+  .sub{max-width:560px;margin:0 auto;color:var(--cream-dim);font-size:16px;line-height:1.6;}
+  .ad-slot{border:1px dashed var(--line);border-radius:8px;padding:14px;text-align:center;color:#6b7280;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin:28px 0;}
+  .studio{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-top:20px;}
+  @media (max-width:760px){.studio{grid-template-columns:1fr;}}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;}
+  .panel-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-dim);margin:0 0 14px;display:flex;justify-content:space-between;}
+  textarea{width:100%;min-height:220px;resize:vertical;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;color:var(--cream);font-family:'Inter',sans-serif;font-size:16px;line-height:1.6;padding:16px;outline:none;}
+  textarea:focus{border-color:var(--teal-bright);}
+  textarea::placeholder{color:#6b7280;}
+  .meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-family:'Space Mono',monospace;font-size:12px;color:var(--cream-dim);}
+  .samples{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .sample-btn{background:transparent;border:1px solid var(--line);color:var(--cream-dim);font-family:'Inter',sans-serif;font-size:12.5px;padding:6px 12px;border-radius:999px;cursor:pointer;transition:all .15s;}
+  .sample-btn:hover{border-color:var(--amber);color:var(--amber);}
+  .mode-toggle{display:flex;gap:8px;margin-bottom:16px;}
+  .mode-btn{flex:1;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2);color:var(--cream-dim);font-size:13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:all .15s;position:relative;}
+  .mode-btn.active{border-color:var(--amber);color:var(--cream);background:#26201a;}
+  .mode-btn .tag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-bright);}
+  select{width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--cream);font-family:'Inter',sans-serif;font-size:14px;padding:10px 12px;border-radius:8px;outline:none;}
+  select:disabled{opacity:.4;}
+  .fader-group{display:flex;justify-content:space-between;gap:14px;margin-top:20px;}
+  .fader{display:flex;flex-direction:column;align-items:center;gap:10px;flex:1;}
+  .fader-label{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cream-dim);}
+  .fader-value{font-family:'Space Mono',monospace;font-size:12px;color:var(--amber);}
+  .fader-track{position:relative;height:120px;width:36px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;display:flex;align-items:flex-end;justify-content:center;padding:4px 0;}
+  input[type=range].vfader{-webkit-appearance:none;appearance:none;width:104px;height:104px;background:transparent;transform:rotate(-90deg);margin:0;}
+  input[type=range].vfader::-webkit-slider-runnable-track{height:4px;background:var(--line);border-radius:4px;}
+  input[type=range].vfader::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:14px;margin-top:-5px;border-radius:3px;background:var(--teal-bright);border:1px solid #0c0f13;cursor:pointer;}
+  input[type=range].vfader::-moz-range-track{height:4px;background:var(--line);border-radius:4px;}
+  input[type=range].vfader::-moz-range-thumb{width:26px;height:14px;border-radius:3px;background:var(--teal-bright);border:1px solid #0c0f13;cursor:pointer;}
+  .note{margin-top:16px;font-size:12.5px;color:var(--cream-dim);line-height:1.6;}
+  .transport{margin-top:20px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  .waveform{flex:1;min-width:140px;height:48px;display:flex;align-items:center;gap:3px;}
+  .bar{width:4px;border-radius:2px;background:var(--teal);height:6px;transition:background .2s;}
+  .bar.active{background:var(--amber);}
+  .btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel-2);color:var(--cream);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
+  .btn:hover{border-color:var(--amber);}
+  .btn.primary{width:54px;height:54px;background:var(--amber);border-color:var(--amber);color:#181410;}
+  .btn.primary:hover{filter:brightness(1.08);}
+  .btn:disabled{opacity:.35;cursor:not-allowed;}
+  .btn:disabled:hover{border-color:var(--line);}
+  .status{font-family:'Space Mono',monospace;font-size:11px;color:var(--cream-dim);letter-spacing:.05em;}
+  .onair{display:flex;align-items:center;gap:8px;}
+  .lamp{width:9px;height:9px;border-radius:50%;background:#3a3f46;transition:all .2s;}
+  .lamp.on{background:var(--rec);box-shadow:0 0 10px 2px rgba(193,68,60,.65);}
+  footer{margin-top:60px;border-top:1px solid var(--line);padding:26px 0 40px;text-align:center;color:#6b7280;font-size:12.5px;}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
+</style>
 </head>
-<body class="bg-gray-950 text-white min-h-screen flex items-center justify-center p-4">
-    <div class="bg-gray-900 p-6 rounded-xl shadow-lg w-full max-w-md border border-gray-800">
-        <h1 class="text-2xl font-bold mb-1">SesVer</h1>
-        <span class="text-xs text-gray-500 mb-6 block">v1.2</span>
+<body>
 
-        <div class="mb-4">
-            <label class="block text-gray-400 text-sm mb-2">SES TONU / KARAKTER SEÇİN</label>
-            <select id="voiceSelect" class="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:outline-none">
-                <option value="NNn9dv8zq2kUo7d3JSGG">Derya</option>
-                <option value="uvU9jrgGLWNPeNA4NgNT">İrem</option>
-                <option value="jkClpoYm4F8SPiN3X41b">Deniz</option>
-                <option value="N0wraTTB0pquzsz3DLG8">Nil</option>
-                <option value="DpEiQMnL9WxMsymCsjPY">Emrullah</option>
-            </select>
+<nav>
+  <div class="wrap nav-inner">
+    <div class="logo"><span class="dot"></span>SesVer</div>
+    <div class="nav-links"><a href="#studio">Araç</a><a href="#hakkinda">Hakkında</a></div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Metinden Sese</p>
+    <h1>Yazdığınız Her Şeyi<br>Sese Dönüştürün</h1>
+    <p class="sub">Türkçe metinlerinizi saniyeler içinde doğal seslendirmeye çevirin. Ücretsiz başlayın, isterseniz premium seslerle kaliteyi bir üst seviyeye taşıyın.</p>
+  </div>
+
+  <div class="ad-slot">Reklam Alanı — 728×90</div>
+
+  <div id="studio">
+    <div class="studio">
+      <div class="panel">
+        <p class="panel-title">Senaryo</p>
+        <textarea id="scriptText" placeholder="Seslendirilecek metni buraya yazın..."></textarea>
+        <div class="meta-row">
+          <span id="charCount">0 karakter</span>
+          <span id="wordCount">0 kelime</span>
         </div>
-
-        <div class="mb-6">
-            <label class="block text-gray-400 text-sm mb-2">SENARYO / METİN</label>
-            <textarea id="textInput" maxlength="500" class="w-full bg-gray-950 text-white p-4 rounded-lg border border-gray-700 h-32 focus:outline-none" placeholder="Buraya yazın..."></textarea>
-            <div id="charCount" class="text-right text-gray-500 text-xs mt-1">0 / 500</div>
+        <div class="samples">
+          <button class="sample-btn" data-sample="Merhaba, bugün nasılsınız? Bu bir örnek seslendirme metnidir.">Örnek: Selamlama</button>
+          <button class="sample-btn" data-sample="Sayın katılımcılar, sunumumuza hoş geldiniz. Bugün üç ana başlığı ele alacağız.">Örnek: Sunum girişi</button>
+          <button class="sample-btn" data-sample="Bu ürünü sepetinize eklemeyi unutmayın. Stoklar sınırlıdır, hemen sipariş verin.">Örnek: Reklam metni</button>
         </div>
+      </div>
 
-        <button id="generateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200">Sesi Oluştur</button>
-
-        <div id="errorMsg" class="mt-4 p-3 bg-red-900/30 border border-red-800 text-red-500 text-sm rounded-lg hidden"></div>
-        <div id="resultArea" class="mt-4 hidden">
-            <audio id="audioPlayer" controls class="w-full mb-3"></audio>
-            <a id="downloadLink" class="block text-center text-blue-400 hover:text-blue-300 underline text-sm">Sesi İndir</a>
+      <div class="panel">
+        <p class="panel-title">Konsol</p>
+        <div class="mode-toggle">
+          <button class="mode-btn active" id="modeFree">Standart<span class="tag">Ücretsiz</span></button>
+          <button class="mode-btn" id="modePremium">Premium<span class="tag">AI Ses</span></button>
         </div>
+        <select id="voiceSelect"></select>
+        <div class="fader-group">
+          <div class="fader">
+            <span class="fader-value" id="rateVal">1.0x</span>
+            <div class="fader-track"><input type="range" class="vfader" id="rate" min="0.5" max="2" step="0.1" value="1"></div>
+            <span class="fader-label">Hız</span>
+          </div>
+          <div class="fader">
+            <span class="fader-value" id="pitchVal">1.0</span>
+            <div class="fader-track"><input type="range" class="vfader" id="pitch" min="0" max="2" step="0.1" value="1"></div>
+            <span class="fader-label">Perde</span>
+          </div>
+          <div class="fader">
+            <span class="fader-value" id="volVal">100%</span>
+            <div class="fader-track"><input type="range" class="vfader" id="volume" min="0" max="1" step="0.05" value="1"></div>
+            <span class="fader-label">Ses Düz.</span>
+          </div>
+        </div>
+        <p class="note" id="modeNote">Tarayıcınızın yerleşik sesini kullanır. Ücretsiz, sınırsız — ancak ses dosyası olarak indirilemez.</p>
+      </div>
     </div>
 
-    <script>
-        const textInput = document.getElementById('textInput');
-        const charCount = document.getElementById('charCount');
-        const generateBtn = document.getElementById('generateBtn');
-        const voiceSelect = document.getElementById('voiceSelect');
-        const audioPlayer = document.getElementById('audioPlayer');
-        const downloadLink = document.getElementById('downloadLink');
-        const errorMsg = document.getElementById('errorMsg');
-        const resultArea = document.getElementById('resultArea');
+    <div class="transport">
+      <button class="btn" id="stopBtn" title="Durdur" disabled>
+        <svg width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" fill="currentColor"/></svg>
+      </button>
+      <button class="btn primary" id="playBtn" title="Oynat">
+        <svg width="18" height="18" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>
+      </button>
+      <button class="btn" id="pauseBtn" title="Duraklat" disabled>
+        <svg width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="2" width="3.5" height="12" fill="currentColor"/><rect x="9.5" y="2" width="3.5" height="12" fill="currentColor"/></svg>
+      </button>
+      <div class="waveform" id="waveform"></div>
+      <div class="onair"><span class="lamp" id="lamp"></span><span class="status" id="playStatus">DURDU</span></div>
+    </div>
+  </div>
 
-        textInput.addEventListener('input', () => {
-            charCount.innerText = `${textInput.value.length} / 500`;
-        });
+  <div class="ad-slot">Reklam Alanı — 728×90</div>
 
-        generateBtn.addEventListener('click', async () => {
-            const text = textInput.value;
-            const voiceId = voiceSelect.value;
+  <div class="panel" id="hakkinda" style="margin-top:20px;">
+    <p class="panel-title">Hakkında</p>
+    <p style="color:var(--cream-dim);font-size:14px;line-height:1.7;margin:0;">
+      SesVer, metinlerinizi hızlıca seslendirmenizi sağlayan ücretsiz bir web aracıdır. Standart mod tarayıcınızın
+      kendi ses motorunu kullanır ve tamamen ücretsizdir. Premium mod yapay zekâ destekli, daha doğal sesler sunar.
+    </p>
+  </div>
+</div>
 
-            if (!text) {
-                alert('Lütfen bir metin girin.');
-                return;
-            }
+<footer>© 2026 SesVer — Metinden sese seslendirme aracı</footer>
 
-            generateBtn.innerText = 'Oluşturuluyor...';
-            generateBtn.disabled = true;
-            errorMsg.classList.add('hidden');
-            resultArea.classList.add('hidden');
+<script>
+const synth = window.speechSynthesis;
+const textArea = document.getElementById('scriptText');
+const voiceSelect = document.getElementById('voiceSelect');
+const rate = document.getElementById('rate');
+const pitch = document.getElementById('pitch');
+const volume = document.getElementById('volume');
+const rateVal = document.getElementById('rateVal');
+const pitchVal = document.getElementById('pitchVal');
+const volVal = document.getElementById('volVal');
+const playBtn = document.getElementById('playBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const stopBtn = document.getElementById('stopBtn');
+const lamp = document.getElementById('lamp');
+const playStatus = document.getElementById('playStatus');
+const waveform = document.getElementById('waveform');
+const charCount = document.getElementById('charCount');
+const wordCount = document.getElementById('wordCount');
+const modeFree = document.getElementById('modeFree');
+const modePremium = document.getElementById('modePremium');
+const modeNote = document.getElementById('modeNote');
 
-            try {
-                const response = await fetch('/api/generate-speech', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text, voiceId })
-                });
+let voices = [];
+let utterance = null;
+let waveInterval = null;
+let isPremium = false;
+let premiumAudio = new Audio();
+let isLoadingPremium = false;
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Ses oluşturulamadı. Lütfen ID\'lerinizi kontrol edin.');
-                }
+const BAR_COUNT = 40;
+for(let i=0;i<BAR_COUNT;i++){
+  const b = document.createElement('div');
+  b.className = 'bar';
+  waveform.appendChild(b);
+}
+const bars = [...waveform.children];
 
-                const blob = await response.blob();
-                const url = URL.createObjectURL(blob);
-                audioPlayer.src = url;
-                downloadLink.href = url;
-                resultArea.classList.remove('hidden');
-            } catch (err) {
-                errorMsg.innerText = err.message;
-                errorMsg.classList.remove('hidden');
-            } finally {
-                generateBtn.innerText = 'Sesi Oluştur';
-                generateBtn.disabled = false;
-            }
-        });
-    </script>
+function populateVoices(){
+  voices = synth.getVoices();
+  if(!voices.length) return;
+  const trVoices = voices.filter(v => v.lang.toLowerCase().startsWith('tr'));
+  const otherVoices = voices.filter(v => !v.lang.toLowerCase().startsWith('tr'));
+  voiceSelect.innerHTML = '';
+  if(trVoices.length){
+    const grp = document.createElement('optgroup');
+    grp.label = 'Türkçe';
+    trVoices.forEach(v=>{
+      const opt = document.createElement('option');
+      opt.value = v.name; opt.textContent = v.name;
+      grp.appendChild(opt);
+    });
+    voiceSelect.appendChild(grp);
+  }
+  const grp2 = document.createElement('optgroup');
+  grp2.label = 'Diğer diller';
+  otherVoices.forEach(v=>{
+    const opt = document.createElement('option');
+    opt.value = v.name; opt.textContent = `${v.name} (${v.lang})`;
+    grp2.appendChild(opt);
+  });
+  voiceSelect.appendChild(grp2);
+}
+populateVoices();
+if(synth.onvoiceschanged !== undefined){ synth.onvoiceschanged = populateVoices; }
+
+function updateCounts(){
+  const text = textArea.value;
+  charCount.textContent = `${text.length} karakter`;
+  const words = text.trim().length ? text.trim().split(/\s+/).length : 0;
+  wordCount.textContent = `${words} kelime`;
+}
+textArea.addEventListener('input', updateCounts);
+updateCounts();
+
+document.querySelectorAll('.sample-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    textArea.value = btn.dataset.sample;
+    updateCounts();
+  });
+});
+
+rate.addEventListener('input', ()=> rateVal.textContent = `${parseFloat(rate.value).toFixed(1)}x`);
+pitch.addEventListener('input', ()=> pitchVal.textContent = parseFloat(pitch.value).toFixed(1));
+volume.addEventListener('input', ()=> volVal.textContent = `${Math.round(volume.value*100)}%`);
+
+modePremium.addEventListener('click', ()=>{
+  isPremium = true;
+  modePremium.classList.add('active');
+  modeFree.classList.remove('active');
+  voiceSelect.disabled = true;
+  modeNote.textContent = 'Yapay zekâ sesi kullanılıyor. Her oynatmada birkaç saniye üretim süresi olabilir.';
+});
+modeFree.addEventListener('click', ()=>{
+  isPremium = false;
+  modeFree.classList.add('active');
+  modePremium.classList.remove('active');
+  voiceSelect.disabled = false;
+  modeNote.textContent = 'Tarayıcınızın yerleşik sesini kullanır. Ücretsiz, sınırsız — ancak ses dosyası olarak indirilemez.';
+});
+
+function setPlayingState(isPlaying, isPaused){
+  lamp.classList.toggle('on', isPlaying && !isPaused);
+  playStatus.textContent = isPaused ? 'DURAKLATILDI' : (isPlaying ? 'OYNUYOR' : 'DURDU');
+  playBtn.disabled = isPlaying && !isPaused;
+  pauseBtn.disabled = !isPlaying || isPaused;
+  stopBtn.disabled = !isPlaying;
+
+  if(isPlaying && !isPaused){
+    if(waveInterval) clearInterval(waveInterval);
+    waveInterval = setInterval(()=>{
+      bars.forEach(b=>{
+        const h = 6 + Math.random()*36;
+        b.style.height = h+'px';
+        b.classList.toggle('active', Math.random() > 0.5);
+      });
+    }, 120);
+  } else {
+    clearInterval(waveInterval);
+    waveInterval = null;
+    bars.forEach(b=>{ b.style.height='6px'; b.classList.remove('active'); });
+  }
+}
+
+async function playPremium(text){
+  if(isLoadingPremium) return;
+  isLoadingPremium = true;
+  playStatus.textContent = 'ÜRETİLİYOR...';
+  playBtn.disabled = true;
+  try{
+    const resp = await fetch('/api/tts', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ text })
+    });
+    if(!resp.ok){
+      const err = await resp.text();
+      alert('Ses üretilemedi: ' + err);
+      setPlayingState(false, false);
+      isLoadingPremium = false;
+      return;
+    }
+    const blob = await resp.blob();
+    const url = URL.createObjectURL(blob);
+    premiumAudio.src = url;
+    premiumAudio.play();
+  } catch(e){
+    alert('Bağlantı hatası: ' + e.message);
+    setPlayingState(false, false);
+  }
+  isLoadingPremium = false;
+}
+
+premiumAudio.addEventListener('play', ()=> setPlayingState(true, false));
+premiumAudio.addEventListener('pause', ()=> setPlayingState(true, true));
+premiumAudio.addEventListener('ended', ()=> setPlayingState(false, false));
+
+playBtn.addEventListener('click', ()=>{
+  const text = textArea.value.trim();
+  if(!text) return;
+
+  if(isPremium){
+    if(premiumAudio.paused && premiumAudio.src){
+      premiumAudio.play();
+      return;
+    }
+    playPremium(text);
+    return;
+  }
+
+  if(synth.paused && utterance){
+    synth.resume();
+    setPlayingState(true, false);
+    return;
+  }
+
+  synth.cancel();
+  utterance = new SpeechSynthesisUtterance(text);
+  const selectedVoice = voices.find(v => v.name === voiceSelect.value);
+  if(selectedVoice) utterance.voice = selectedVoice;
+  utterance.rate = parseFloat(rate.value);
+  utterance.pitch = parseFloat(pitch.value);
+  utterance.volume = parseFloat(volume.value);
+
+  utterance.onstart = () => setPlayingState(true, false);
+  utterance.onend = () => setPlayingState(false, false);
+  utterance.onerror = () => setPlayingState(false, false);
+  utterance.onpause = () => setPlayingState(true, true);
+  utterance.onresume = () => setPlayingState(true, false);
+
+  synth.speak(utterance);
+});
+
+pauseBtn.addEventListener('click', ()=>{
+  if(isPremium){
+    premiumAudio.pause();
+    return;
+  }
+  if(synth.speaking && !synth.paused){
+    synth.pause();
+    setPlayingState(true, true);
+  }
+});
+
+stopBtn.addEventListener('click', ()=>{
+  if(isPremium){
+    premiumAudio.pause();
+    premiumAudio.currentTime = 0;
+    setPlayingState(false, false);
+    return;
+  }
+  synth.cancel();
+  setPlayingState(false, false);
+});
+
+window.addEventListener('beforeunload', ()=> synth.cancel());
+</script>
 </body>
 </html>
